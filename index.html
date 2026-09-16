@@ -341,6 +341,7 @@
     <a href="#ddd">DDD</a>
     <a href="#togaf">TOGAF</a>
     <a href="#library">Your library</a>
+    <a href="#etl">Build pillars</a>
   </nav>
 
   <section class="timeline-section" id="lineage">
@@ -762,11 +763,11 @@
         <thead><tr><th>Section</th><th>From your library</th></tr></thead>
         <tbody>
           <tr><td class="name"><a href="#sdlc">SDLC / Agile</a></td><td>"A data-driven comparative analysis of Agile and Waterfall methodologies" (paper) · SAFe scaled-agile course notes</td></tr>
-          <tr><td class="name">Architecture &amp; patterns</td><td><em>Fundamentals of Software Architecture</em> · Kuchana, <em>Software Architecture Design Patterns in Java</em> · Buschmann et al., <em>Pattern-Oriented Software Architecture, Vol. 1</em></td></tr>
+          <tr><td class="name">Architecture &amp; patterns</td><td><em>Fundamentals of Software Architecture</em> · Kuchana, <em>Software Architecture Design Patterns in Java</em> · Buschmann et al., <em>Pattern-Oriented Software Architecture, Vol. 1</em> · Seroter et al., <em>Applied Architecture Patterns on the Microsoft Platform</em></td></tr>
           <tr><td class="name"><a href="#ddd">Domain-Driven Design</a></td><td>Eric Evans, <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em> — the source text section 09 is built from</td></tr>
           <tr><td class="name"><a href="#togaf">TOGAF</a></td><td><em>TOGAF Standard, 10th Edition — Certification Portfolio</em> · TOGAF EA Foundation datasheet</td></tr>
           <tr><td class="name"><a href="#devops">Microservices &amp; DevOps</a></td><td>Garofolo, <em>Practical Microservices</em> (event sourcing/CQRS) · Vohra, <em>Kubernetes Microservices with Docker</em> · Riti, <em>Pro DevOps with Google Cloud Platform</em></td></tr>
-          <tr><td class="name">Databases</td><td><em>DataBaseBook2023</em> · Transact-SQL / PL-SQL references · "Query Acceleration of Graph Databases"</td></tr>
+          <tr><td class="name">Databases</td><td><em>DataBaseBook2023</em> · Transact-SQL / PL-SQL references · "Query Acceleration of Graph Databases" · "Components and Development in Big Data Systems" (2019)</td></tr>
           <tr><td class="name"><a href="#theory">AI / ML / algorithms</a></td><td>Russell &amp; Norvig, <em>Artificial Intelligence: A Modern Approach</em> · Weiss, <em>Multiagent Systems</em> · Herbrich, <em>Learning Kernel Classifiers</em></td></tr>
           <tr><td class="name">Security</td><td>"Secure Network Architecture" · "Introduction to SQL Injection"</td></tr>
           <tr><td class="name">Project management</td><td>Heldman, <em>PMP: Project Management Professional Study Guide</em> · University of Waterloo RAID Log reference</td></tr>
@@ -780,6 +781,33 @@
       <span><code>research-toolkit/document_catalog.duckdb</code>, built from the Zotero library synced via Dropbox</span>
       <span>·</span>
       <span>this is a live query of what you already have, not a curated reading list — titles are deduped but not vetted for quality</span>
+    </div>
+    <div class="lib-source" style="margin-top:10px; border-color:var(--warn); background:var(--warn-soft);">
+      <span>Checked and confirmed absent: ETL/data-engineering toolkits. A full sweep — catalog titles, then Dropbox's own content-indexed search across the actual PDF text, not just filenames — found zero mentions of Airflow, dbt, Kafka, Postgres, MySQL, MongoDB, Snowflake, BigQuery, or Oracle anywhere in the library. The table above is the complete, honest extent of what you have on databases; §12 below is general knowledge, not library-sourced.</span>
+    </div>
+  </section>
+
+  <section id="etl">
+    <div class="section-head"><span class="section-num">12</span><h2>Essential approaches for building tools</h2></div>
+    <p class="section-intro">Not from your library — general industry knowledge, offered because the search above came back empty. Process (sections 01–08) decides <em>when</em> and <em>in what order</em> work happens; these are the technical pillars that decide whether the thing you build actually holds up, data-engineering included.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Pillar</th><th>What it covers</th><th>Representative tools / practices</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Interface &amp; API design</td><td>Stable contracts, versioning, idempotent operations</td><td>REST/GraphQL/gRPC conventions, OpenAPI specs, SemVer</td></tr>
+          <tr><td class="name">Data modeling &amp; persistence</td><td>Schema design, normalization vs. denormalization, safe migrations</td><td>PostgreSQL, MySQL, schema-migration tools (Alembic, Flyway)</td></tr>
+          <tr><td class="name">Data engineering / ETL</td><td>Moving and transforming data reliably between systems</td><td>Orchestration: Airflow, Dagster, Prefect · Transform: dbt · CDC/streaming: Debezium, Kafka · Warehouses: Snowflake, BigQuery, Redshift · Quality: Great Expectations</td></tr>
+          <tr><td class="name">Testing strategy</td><td>Confidence at the right altitude — unit, integration, end-to-end</td><td>The testing pyramid, property-based testing (Hypothesis), contract tests (Pact)</td></tr>
+          <tr><td class="name">Observability</td><td>Knowing what's happening in production before a user reports it</td><td>Structured logs, metrics (Prometheus), tracing (OpenTelemetry), SLIs/SLOs</td></tr>
+          <tr><td class="name">Error handling &amp; resilience</td><td>Failing predictably instead of silently or catastrophically</td><td>Retries with backoff, circuit breakers, idempotency keys, graceful degradation</td></tr>
+          <tr><td class="name">Security &amp; auth</td><td>Least privilege by default, not bolted on after the fact</td><td>OAuth/OIDC, secrets managers (Vault), input validation, dependency scanning</td></tr>
+          <tr><td class="name">Configuration management</td><td>Behavior that changes without a redeploy</td><td>Env-var config, feature flags, validated config schemas</td></tr>
+          <tr><td class="name">Documentation</td><td>Decisions and usage that outlive the person who made them</td><td>READMEs, Architecture Decision Records, generated API reference docs</td></tr>
+          <tr><td class="name">Packaging &amp; distribution</td><td>Getting the tool into someone else's hands reliably</td><td>Reproducible builds, lockfiles, semantic versioning, container images</td></tr>
+          <tr><td class="name">Performance &amp; scalability</td><td>Staying fast as load grows, not just at demo scale</td><td>Caching, pagination/batching, async I/O, load testing</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
