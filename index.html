@@ -1,0 +1,791 @@
+<title>The Delivery Playbook</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg:#EAEEF0;
+    --bg-raised:#F8FAFA;
+    --bg-sunken:#E1E6E8;
+    --ink:#16202B;
+    --ink-dim:#4B5A66;
+    --ink-faint:#7C8B94;
+    --line:#C7D0D4;
+    --line-strong:#A9B5BA;
+    --accent:#0E7C86;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#DCEEF0;
+    --warn:#A85A1B;
+    --warn-soft:#F3E4D2;
+    --good:#3E7A4E;
+    --good-soft:#DEEBDF;
+    --risk:#B0473F;
+    --risk-soft:#F5DEDB;
+    --shadow: 0 1px 2px rgba(22,32,43,0.06), 0 6px 16px -8px rgba(22,32,43,0.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#10161C;
+      --bg-raised:#171F27;
+      --bg-sunken:#0B1015;
+      --ink:#E7EAEC;
+      --ink-dim:#9FB0B8;
+      --ink-faint:#6E7C84;
+      --line:#2A363F;
+      --line-strong:#3B4954;
+      --accent:#52C4CE;
+      --accent-ink:#062326;
+      --accent-soft:#153238;
+      --warn:#E3A05C;
+      --warn-soft:#33261A;
+      --good:#79C48C;
+      --good-soft:#1B2C20;
+      --risk:#E08A82;
+      --risk-soft:#332020;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 20px -10px rgba(0,0,0,0.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10161C;
+    --bg-raised:#171F27;
+    --bg-sunken:#0B1015;
+    --ink:#E7EAEC;
+    --ink-dim:#9FB0B8;
+    --ink-faint:#6E7C84;
+    --line:#2A363F;
+    --line-strong:#3B4954;
+    --accent:#52C4CE;
+    --accent-ink:#062326;
+    --accent-soft:#153238;
+    --warn:#E3A05C;
+    --warn-soft:#33261A;
+    --good:#79C48C;
+    --good-soft:#1B2C20;
+    --risk:#E08A82;
+    --risk-soft:#332020;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 20px -10px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Serif', Georgia, 'Times New Roman', serif;
+    line-height:1.7;
+    padding:0 20px;
+  }
+  .wrap{max-width:920px; margin:0 auto; padding-block:0 64px;}
+
+  h1,h2,h3,.sans{font-family:'IBM Plex Sans', -apple-system, Helvetica, Arial, sans-serif;}
+  .mono{font-family:'IBM Plex Mono', ui-monospace, Menlo, monospace;}
+
+  h1,h2,h3{text-wrap:balance; color:var(--ink); font-weight:600; margin:0;}
+
+  a{color:var(--accent);}
+
+  /* ---- masthead ---- */
+  .masthead{padding-top:40px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+  }
+  h1{font-size:clamp(2rem, 4.2vw, 2.75rem); margin-top:10px; line-height:1.12;}
+  .dek{
+    font-family:'IBM Plex Serif', serif;
+    font-style:italic;
+    font-size:1.12rem;
+    color:var(--ink-dim);
+    max-width:62ch;
+    margin-top:14px;
+  }
+
+  .control-block{
+    margin-top:28px;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    border:1px solid var(--line);
+    border-radius:4px;
+    overflow:hidden;
+    background:var(--bg-raised);
+    box-shadow:var(--shadow);
+  }
+  .control-block > div{
+    padding:12px 16px;
+    border-left:1px solid var(--line);
+  }
+  .control-block > div:first-child{border-left:none;}
+  .control-block dt{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+    margin:0 0 4px;
+  }
+  .control-block dd{
+    margin:0;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:13.5px;
+    font-weight:500;
+    color:var(--ink);
+  }
+
+  /* ---- nav ---- */
+  nav.toc{
+    position:sticky; top:0; z-index:5;
+    margin:36px -20px 0;
+    padding:12px 20px;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+    display:flex; gap:18px; flex-wrap:wrap;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+  }
+  nav.toc a{color:var(--ink-dim); text-decoration:none; white-space:nowrap;}
+  nav.toc a:hover{color:var(--accent);}
+
+  /* ---- timeline ---- */
+  .timeline-section{margin-top:56px;}
+  .timeline{
+    margin-top:26px;
+    display:grid;
+    grid-auto-flow:column;
+    grid-auto-columns:minmax(150px,1fr);
+    gap:0;
+    overflow-x:auto;
+    padding-bottom:6px;
+  }
+  .timeline::before{content:none;}
+  .tl-item{
+    position:relative;
+    padding:20px 14px 0 0;
+    border-top:2px solid var(--line-strong);
+  }
+  .tl-item::before{
+    content:'';
+    position:absolute; top:-5px; left:0;
+    width:8px; height:8px; border-radius:50%;
+    background:var(--accent);
+  }
+  .tl-year{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--accent); font-weight:600; font-variant-numeric:tabular-nums;}
+  .tl-name{font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:14px; margin-top:4px;}
+  .tl-note{font-size:12.5px; color:var(--ink-dim); margin-top:4px; line-height:1.45;}
+
+  /* ---- sections ---- */
+  section{margin-top:64px;}
+  .section-head{display:flex; align-items:baseline; gap:12px; border-bottom:1px solid var(--line); padding-bottom:12px;}
+  .section-num{font-family:'IBM Plex Mono',monospace; color:var(--accent); font-size:14px; font-weight:600;}
+  h2{font-size:clamp(1.4rem,2.6vw,1.75rem);}
+  .section-intro{color:var(--ink-dim); max-width:68ch; margin-top:14px; font-size:1.02rem;}
+
+  /* ---- comparison table ---- */
+  .table-wrap{overflow-x:auto; margin-top:24px; border:1px solid var(--line); border-radius:6px; box-shadow:var(--shadow);}
+  table{border-collapse:collapse; width:100%; min-width:760px; background:var(--bg-raised);}
+  thead th{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--ink-faint); text-align:left; font-weight:600;
+    padding:12px 16px; border-bottom:1px solid var(--line-strong);
+    background:var(--bg-sunken);
+  }
+  tbody td{
+    padding:14px 16px; vertical-align:top;
+    border-bottom:1px solid var(--line);
+    font-size:0.95rem;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  td.name{font-family:'IBM Plex Sans',sans-serif; font-weight:600; color:var(--ink); white-space:nowrap;}
+  td.fail{color:var(--risk);}
+  td.fail::before{content:'⚠ '; opacity:0.8;}
+
+  /* ---- CALMS strip ---- */
+  .calms{
+    margin-top:26px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .calms > div{background:var(--bg-raised); padding:18px 14px;}
+  .calms .letter{font-family:'IBM Plex Mono',monospace; color:var(--accent); font-weight:700; font-size:20px;}
+  .calms .word{font-family:'IBM Plex Sans',sans-serif; font-weight:600; font-size:13px; margin-top:6px;}
+  .calms .desc{font-size:12px; color:var(--ink-dim); margin-top:6px; line-height:1.45;}
+
+  .pipeline{
+    margin-top:22px; display:flex; align-items:center; flex-wrap:wrap; gap:0;
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px;
+  }
+  .pipeline .stage{
+    background:var(--accent-soft); color:var(--accent); border:1px solid var(--accent);
+    padding:8px 14px; border-radius:4px; font-weight:600;
+  }
+  .pipeline .arrow{color:var(--ink-faint); padding:0 8px;}
+
+  /* ---- checklist ---- */
+  .checklist{
+    margin-top:24px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    gap:14px;
+  }
+  .check-item{
+    background:var(--bg-raised); border:1px solid var(--line); border-radius:6px;
+    padding:16px 18px; box-shadow:var(--shadow);
+  }
+  .check-item .tag{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--accent); font-weight:600;
+  }
+  .check-item h3{font-size:1rem; margin-top:6px;}
+  .check-item p{font-size:0.92rem; color:var(--ink-dim); margin:8px 0 0; line-height:1.55;}
+
+  /* ---- quadrant ---- */
+  .quadrant-wrap{margin-top:26px; display:grid; grid-template-columns:1.3fr 1fr; gap:28px; align-items:center;}
+  @media (max-width:720px){ .quadrant-wrap{grid-template-columns:1fr;} }
+  .quadrant-wrap svg{width:100%; height:auto; display:block;}
+  .quadrant-legend{font-size:0.92rem; color:var(--ink-dim);}
+  .quadrant-legend .lg-row{display:flex; gap:10px; align-items:flex-start; margin-bottom:14px;}
+  .quadrant-legend .dot{width:10px; height:10px; border-radius:50%; margin-top:6px; flex:none;}
+  .quadrant-legend b{color:var(--ink); font-family:'IBM Plex Sans',sans-serif;}
+
+  /* ---- anti-patterns ---- */
+  .antipattern{
+    margin-top:18px; padding:18px 20px;
+    background:var(--bg-raised); border:1px solid var(--line); border-left:3px solid var(--risk);
+    border-radius:4px;
+  }
+  .antipattern h3{font-size:1.02rem; display:flex; align-items:center; gap:8px;}
+  .antipattern .sym{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--risk); background:var(--risk-soft); padding:2px 8px; border-radius:99px; font-weight:600;
+  }
+  .antipattern p{margin:10px 0 0; color:var(--ink-dim); font-size:0.95rem;}
+  .antipattern .fix{margin-top:10px; padding-top:10px; border-top:1px dashed var(--line); font-size:0.92rem;}
+  .antipattern .fix b{color:var(--good); font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase;}
+
+  /* ---- applied / lenses ---- */
+  .lens-table{margin-top:24px;}
+  .formula{
+    margin-top:22px; padding:18px 22px; background:var(--bg-sunken); border:1px solid var(--line);
+    border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:0.95rem; color:var(--ink);
+    overflow-x:auto;
+  }
+  .formula .note{margin-top:10px; font-family:'IBM Plex Serif',serif; font-size:0.9rem; color:var(--ink-dim); font-style:italic;}
+  .learned{
+    margin-top:24px; padding:18px 20px;
+    background:var(--bg-raised); border:1px solid var(--line); border-left:3px solid var(--good);
+    border-radius:4px;
+  }
+  .learned h3{font-size:1.02rem; display:flex; align-items:center; gap:8px;}
+  .learned .sym{
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--good); background:var(--good-soft); padding:2px 8px; border-radius:99px; font-weight:600;
+  }
+  .learned p{margin:10px 0 0; color:var(--ink-dim); font-size:0.95rem;}
+  .learned code{font-family:'IBM Plex Mono',monospace; font-size:0.88em; background:var(--bg-sunken); padding:1px 5px; border-radius:3px;}
+
+  .subhead{
+    margin-top:30px; margin-bottom:0;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--ink-faint); display:flex; align-items:center; gap:10px;
+  }
+  .subhead::after{content:''; flex:1; height:1px; background:var(--line);}
+  .lib-source{
+    margin-top:22px; padding:14px 18px; background:var(--bg-sunken); border:1px solid var(--line);
+    border-radius:6px; font-size:0.88rem; color:var(--ink-dim); display:flex; gap:10px; align-items:baseline; flex-wrap:wrap;
+  }
+  .lib-source .stat{font-family:'IBM Plex Mono',monospace; color:var(--accent); font-weight:600;}
+
+  footer{
+    margin-top:70px; padding-top:22px; border-top:1px solid var(--line);
+    font-size:0.85rem; color:var(--ink-faint); font-family:'IBM Plex Mono',monospace;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  ::selection{background:var(--accent-soft); color:var(--ink);}
+</style>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <div class="eyebrow mono">Reference · Software Delivery</div>
+    <h1>The Delivery Playbook</h1>
+    <p class="dek">A field guide to SDLC, Agile, and DevOps models — where each one comes from, when it earns its keep, how it fails in practice, and the handful of disciplines that hold true no matter which one you're running.</p>
+
+    <dl class="control-block">
+      <div><dt>Scope</dt><dd>SDLC · Agile · DevOps</dd></div>
+      <div><dt>Disciplines</dt><dd>16 models · 10 theory · DDD · TOGAF</dd></div>
+      <div><dt>Use for</dt><dd>Choosing &amp; diagnosing</dd></div>
+      <div><dt>Status</dt><dd>Living reference</dd></div>
+    </dl>
+  </div>
+
+  <nav class="toc">
+    <a href="#lineage">Lineage</a>
+    <a href="#sdlc">Classic SDLC</a>
+    <a href="#agile">Agile family</a>
+    <a href="#devops">DevOps &amp; CD</a>
+    <a href="#universal">Universal practices</a>
+    <a href="#fit">Fit finder</a>
+    <a href="#antipatterns">Failure modes</a>
+    <a href="#applied">Applied</a>
+    <a href="#theory">CS theory</a>
+    <a href="#ddd">DDD</a>
+    <a href="#togaf">TOGAF</a>
+    <a href="#library">Your library</a>
+  </nav>
+
+  <section class="timeline-section" id="lineage">
+    <div class="section-head"><span class="section-num">00</span><h2>Lineage</h2></div>
+    <p class="section-intro">Every model on this page exists because the one before it broke down somewhere specific. Reading them in order tells you more than reading any one in isolation.</p>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-year">1970</div><div class="tl-name">Waterfall</div><div class="tl-note">Royce formalizes sequential phases — then spends the rest of the paper warning against running it without feedback loops.</div></div>
+      <div class="tl-item"><div class="tl-year">1988</div><div class="tl-name">Spiral</div><div class="tl-note">Boehm adds risk analysis loops on top of waterfall for projects where the unknowns are the danger.</div></div>
+      <div class="tl-item"><div class="tl-year">1995</div><div class="tl-name">Scrum</div><div class="tl-note">Schwaber &amp; Sutherland formalize timeboxed sprints and inspect-adapt cadence.</div></div>
+      <div class="tl-item"><div class="tl-year">1999</div><div class="tl-name">XP</div><div class="tl-note">Beck pushes engineering discipline — TDD, pairing, CI — to the center of the process.</div></div>
+      <div class="tl-item"><div class="tl-year">2001</div><div class="tl-name">Agile Manifesto</div><div class="tl-note">17 practitioners name the shared values under Scrum, XP, Crystal, and the rest.</div></div>
+      <div class="tl-item"><div class="tl-year">2007</div><div class="tl-name">Kanban (software)</div><div class="tl-note">Anderson adapts Toyota's pull system for flow-based, non-iterative work.</div></div>
+      <div class="tl-item"><div class="tl-year">2009</div><div class="tl-name">DevOps</div><div class="tl-note">Debois coins the term; Flickr's "10+ deploys a day" shows continuous delivery at scale.</div></div>
+      <div class="tl-item"><div class="tl-year">2011</div><div class="tl-name">Lean Startup / SAFe</div><div class="tl-note">Ries applies build-measure-learn to product risk; SAFe attempts to scale agile across whole organizations.</div></div>
+      <div class="tl-item"><div class="tl-year">2014</div><div class="tl-name">DORA metrics</div><div class="tl-note">Forsgren's research gives delivery performance four measurable signals instead of opinions.</div></div>
+    </div>
+  </section>
+
+  <section id="sdlc">
+    <div class="section-head"><span class="section-num">01</span><h2>Classic SDLC models</h2></div>
+    <p class="section-intro">Plan-driven models treat the requirement as knowable in advance and optimize for getting it right the first time. They still run the world in aerospace, medical devices, and anywhere a mistake is expensive to unwind.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Model</th><th>Shape</th><th>Best fit</th><th>Key artifact</th><th>Where it breaks</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="name">Waterfall</td>
+            <td>One pass: requirements → design → build → verify → maintain</td>
+            <td>Fixed, well-understood scope; contractual or regulated delivery</td>
+            <td>Signed-off requirements specification</td>
+            <td class="fail">Misunderstandings surface at acceptance, not at week two</td>
+          </tr>
+          <tr>
+            <td class="name">V-Model</td>
+            <td>Waterfall with each build phase mirrored by a test phase</td>
+            <td>Safety-critical systems — medical, automotive, aerospace</td>
+            <td>Requirements-to-test traceability matrix</td>
+            <td class="fail">Verification-heavy; still can't absorb a changed requirement mid-flight</td>
+          </tr>
+          <tr>
+            <td class="name">Incremental</td>
+            <td>Deliver in functional slices, each its own mini-waterfall</td>
+            <td>Large systems where the core is known but can be sequenced</td>
+            <td>Prioritized increment roadmap</td>
+            <td class="fail">Weak upfront architecture makes late increments expensive to bolt on</td>
+          </tr>
+          <tr>
+            <td class="name">Spiral</td>
+            <td>Repeated loops of plan → assess risk → prototype → evaluate</td>
+            <td>Novel, high-cost, high-risk builds needing real prototyping</td>
+            <td>Risk register, updated every loop</td>
+            <td class="fail">Formal risk analysis overhead crushes momentum on ordinary projects</td>
+          </tr>
+          <tr>
+            <td class="name">RAD</td>
+            <td>Heavy prototyping with continuous user feedback, light planning</td>
+            <td>UI-heavy apps, tight deadlines, an engaged user in the room</td>
+            <td>Evolving working prototype</td>
+            <td class="fail">Thin on architecture discipline — punishing for large or long-lived systems</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="agile">
+    <div class="section-head"><span class="section-num">02</span><h2>The Agile family</h2></div>
+    <p class="section-intro">Agile methods treat the requirement as unknowable in advance and optimize for shortening the feedback loop instead. They trade upfront certainty for the ability to change direction cheaply.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Model</th><th>Shape</th><th>Best fit</th><th>Key artifact</th><th>Where it breaks</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="name">Scrum</td>
+            <td>Fixed-length sprints; PO/Scrum Master/dev team; planning, daily, review, retro</td>
+            <td>One product team with priorities that shift, but not daily</td>
+            <td>Sprint backlog &amp; burndown</td>
+            <td class="fail">"Zombie Scrum" — ceremonies run on autopilot, nothing actually inspected</td>
+          </tr>
+          <tr>
+            <td class="name">Kanban</td>
+            <td>Continuous pull-based flow, explicit WIP limits, no fixed iteration</td>
+            <td>Support, ops, and maintenance work of unpredictable size</td>
+            <td>Board + cumulative flow diagram</td>
+            <td class="fail">Without enforced WIP limits it's just a to-do list, and throughput collapses</td>
+          </tr>
+          <tr>
+            <td class="name">XP</td>
+            <td>Pair programming, TDD, continuous integration, collective code ownership</td>
+            <td>Teams needing high code quality against changing requirements</td>
+            <td>A passing automated test suite as the living spec</td>
+            <td class="fail">Practices adopted without the discipline — tests written after the fact — become theater</td>
+          </tr>
+          <tr>
+            <td class="name">Lean / Lean Startup</td>
+            <td>Eliminate waste; validate the riskiest assumption with the smallest experiment</td>
+            <td>High-uncertainty, pre-product-market-fit stage</td>
+            <td>Validated-learning log from each MVP experiment</td>
+            <td class="fail">"MVP" quietly becomes the permanent, never-polished product</td>
+          </tr>
+          <tr>
+            <td class="name">Crystal</td>
+            <td>Family of lightweight methods, scaled by team size and criticality</td>
+            <td>Small, co-located, trusted teams</td>
+            <td>Reflection-workshop notes</td>
+            <td class="fail">Under-specified once the team is distributed or grows past ~8</td>
+          </tr>
+          <tr>
+            <td class="name">SAFe / LeSS</td>
+            <td>Shared cadence across many teams — PI planning, Scrum of Scrums</td>
+            <td>Large orgs with real cross-team dependencies</td>
+            <td>Program roadmap + dependency board</td>
+            <td class="fail">"Dark agile" — the scaling framework re-grows the bureaucracy agile removed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="devops">
+    <div class="section-head"><span class="section-num">03</span><h2>DevOps &amp; continuous delivery</h2></div>
+    <p class="section-intro">DevOps isn't a lifecycle model competing with the ones above — it's the delivery substrate underneath any of them: the pipe that gets a change from a developer's machine to production, safely, on a cadence measured in hours rather than release trains.</p>
+
+    <div class="calms">
+      <div><div class="letter">C</div><div class="word">Culture</div><div class="desc">Dev and ops share the pager, not just the roadmap</div></div>
+      <div><div class="letter">A</div><div class="word">Automation</div><div class="desc">Build, test, and deploy without a human in the loop</div></div>
+      <div><div class="letter">L</div><div class="word">Lean</div><div class="desc">Small batches, short queues, fast feedback</div></div>
+      <div><div class="letter">M</div><div class="word">Measurement</div><div class="desc">Deploy frequency, lead time, MTTR, change-fail rate</div></div>
+      <div><div class="letter">S</div><div class="word">Sharing</div><div class="desc">Blameless postmortems; knowledge isn't a moat</div></div>
+    </div>
+
+    <div class="pipeline">
+      <span class="stage">commit</span><span class="arrow">→</span>
+      <span class="stage">build</span><span class="arrow">→</span>
+      <span class="stage">test</span><span class="arrow">→</span>
+      <span class="stage">stage</span><span class="arrow">→</span>
+      <span class="stage">canary</span><span class="arrow">→</span>
+      <span class="stage">production</span><span class="arrow">→</span>
+      <span class="stage">observe</span>
+    </div>
+  </section>
+
+  <section id="universal">
+    <div class="section-head"><span class="section-num">04</span><h2>Practices that hold regardless of model</h2></div>
+    <p class="section-intro">Strip away the ceremony names and every model that actually works is leaning on the same underlying disciplines.</p>
+    <div class="checklist">
+      <div class="check-item"><div class="tag">Definition of done</div><h3>Written, shared, checked every time</h3><p>Not "it compiles" — tested, reviewed, documented, and deployable. Waterfall calls this an exit criterion; Scrum calls it a DoD. Same idea.</p></div>
+      <div class="check-item"><div class="tag">Small batches</div><h3>Shorten the loop, not the plan</h3><p>A two-week sprint and a Kanban WIP limit of 3 are solving the same problem: feedback arrives before the mistake compounds.</p></div>
+      <div class="check-item"><div class="tag">Traceability</div><h3>Requirement → code → test</h3><p>A V-Model traceability matrix and a commit message with a ticket ID are the same discipline at different weights.</p></div>
+      <div class="check-item"><div class="tag">Debt is budgeted</div><h3>Visible, not just complained about</h3><p>Technical debt that isn't on the backlog isn't being managed — it's being deferred onto whoever's on call next quarter.</p></div>
+      <div class="check-item"><div class="tag">Blameless review</div><h3>Incidents and retros ask "what," not "who"</h3><p>The moment a review becomes personal, people stop reporting the near-misses that would have caught the real incident.</p></div>
+      <div class="check-item"><div class="tag">Docs move with code</div><h3>Updated in the same change, not after</h3><p>Documentation written after the fact is documentation written from memory — and memory is already wrong by then.</p></div>
+      <div class="check-item"><div class="tag">Review is a gate</div><h3>Not a courtesy pass</h3><p>Whether it's a formal design review board or a required PR approval, the point is the same: a second person can still say no.</p></div>
+      <div class="check-item"><div class="tag">Observability first</div><h3>Built in, not bolted on after an incident</h3><p>If the first time you add logging for a code path is the outage it caused, you've paid for the instrumentation twice.</p></div>
+    </div>
+  </section>
+
+  <section id="fit">
+    <div class="section-head"><span class="section-num">05</span><h2>Fit finder</h2></div>
+    <p class="section-intro">Two questions place most projects: how often do requirements actually change, and how expensive is a mistake once it ships? DevOps discipline runs underneath all four quadrants — it's not a fifth option.</p>
+    <div class="quadrant-wrap">
+      <svg viewBox="0 0 560 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Quadrant chart: requirement volatility versus cost of failure, placing delivery models in each quadrant">
+        <rect x="60" y="30" width="230" height="180" fill="var(--risk-soft)" opacity="0.5"/>
+        <rect x="290" y="30" width="230" height="180" fill="var(--warn-soft)" opacity="0.5"/>
+        <rect x="60" y="210" width="230" height="160" fill="var(--accent-soft)" opacity="0.5"/>
+        <rect x="290" y="210" width="230" height="160" fill="var(--good-soft)" opacity="0.5"/>
+
+        <line x1="60" y1="30" x2="60" y2="370" stroke="var(--line-strong)" stroke-width="1.5"/>
+        <line x1="60" y1="370" x2="520" y2="370" stroke="var(--line-strong)" stroke-width="1.5"/>
+        <line x1="290" y1="30" x2="290" y2="370" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 4"/>
+        <line x1="60" y1="210" x2="520" y2="210" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 4"/>
+
+        <text x="290" y="398" text-anchor="middle" fill="var(--ink-dim)" font-family="IBM Plex Mono, monospace" font-size="12">requirement volatility →</text>
+        <text x="30" y="200" text-anchor="middle" fill="var(--ink-dim)" font-family="IBM Plex Mono, monospace" font-size="12" transform="rotate(-90 30 200)">cost of failure →</text>
+
+        <text x="80" y="48" fill="var(--ink-faint)" font-family="IBM Plex Mono, monospace" font-size="10.5">HIGH · STABLE</text>
+        <text x="500" y="48" text-anchor="end" fill="var(--ink-faint)" font-family="IBM Plex Mono, monospace" font-size="10.5">HIGH · VOLATILE</text>
+        <text x="80" y="358" fill="var(--ink-faint)" font-family="IBM Plex Mono, monospace" font-size="10.5">LOW · STABLE</text>
+        <text x="500" y="358" text-anchor="end" fill="var(--ink-faint)" font-family="IBM Plex Mono, monospace" font-size="10.5">LOW · VOLATILE</text>
+
+        <circle cx="145" cy="100" r="6" fill="var(--risk)"/>
+        <text x="160" y="97" fill="var(--ink)" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600">V-Model</text>
+        <text x="160" y="113" fill="var(--ink-dim)" font-family="IBM Plex Sans, sans-serif" font-size="12">Waterfall</text>
+
+        <circle cx="400" cy="100" r="6" fill="var(--warn)"/>
+        <text x="415" y="97" fill="var(--ink)" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600">Spiral</text>
+        <text x="415" y="113" fill="var(--ink-dim)" font-family="IBM Plex Sans, sans-serif" font-size="12">Risk-driven iterative</text>
+
+        <circle cx="145" cy="290" r="6" fill="var(--accent)"/>
+        <text x="160" y="287" fill="var(--ink)" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600">Incremental</text>
+        <text x="160" y="303" fill="var(--ink-dim)" font-family="IBM Plex Sans, sans-serif" font-size="12">Kanban</text>
+
+        <circle cx="400" cy="290" r="6" fill="var(--good)"/>
+        <text x="415" y="287" fill="var(--ink)" font-family="IBM Plex Sans, sans-serif" font-size="13" font-weight="600">Scrum · XP</text>
+        <text x="415" y="303" fill="var(--ink-dim)" font-family="IBM Plex Sans, sans-serif" font-size="12">Lean Startup</text>
+      </svg>
+      <div class="quadrant-legend">
+        <div class="lg-row"><span class="dot" style="background:var(--risk)"></span><span><b>High stakes, known scope</b> — V-Model or Waterfall. The cost of a wrong turn justifies the cost of planning it out first.</span></div>
+        <div class="lg-row"><span class="dot" style="background:var(--warn)"></span><span><b>High stakes, unclear scope</b> — Spiral. Spend the first loops on prototypes and risk, not on the full build.</span></div>
+        <div class="lg-row"><span class="dot" style="background:var(--accent)"></span><span><b>Low stakes, known scope</b> — Incremental or Kanban. Don't pay for ceremony the risk doesn't justify.</span></div>
+        <div class="lg-row"><span class="dot" style="background:var(--good)"></span><span><b>Low stakes, unclear scope</b> — Scrum, XP, Lean Startup. Optimize purely for the speed of the feedback loop.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="antipatterns">
+    <div class="section-head"><span class="section-num">06</span><h2>Failure modes worth naming</h2></div>
+    <p class="section-intro">Most process failures aren't the model's fault — they're the model's form kept while its substance was dropped.</p>
+
+    <div class="antipattern">
+      <h3>Scrummerfall <span class="sym">Agile</span></h3>
+      <p>Sprints are bolted onto a plan whose scope and deadline were fixed months ago. "Sprint review" becomes a status report against a schedule nobody's allowed to renegotiate.</p>
+      <div class="fix"><b>Fix →</b> let scope flex within the date, or the date flex within the scope. Never fix both and call it agile.</div>
+    </div>
+    <div class="antipattern">
+      <h3>Zombie Scrum <span class="sym">Agile</span></h3>
+      <p>All four ceremonies happen, on schedule, every sprint — and nothing anyone says in them ever changes what happens next.</p>
+      <div class="fix"><b>Fix →</b> every retro item gets a named owner and a deadline, tracked exactly like a bug.</div>
+    </div>
+    <div class="antipattern">
+      <h3>Watermelon status <span class="sym">Any model</span></h3>
+      <p>Green on the dashboard, red underneath. Usually caused by measuring activity — story points, hours logged — instead of outcomes.</p>
+      <div class="fix"><b>Fix →</b> track lead time and escaped defects alongside velocity, never velocity alone.</div>
+    </div>
+    <div class="antipattern">
+      <h3>Cargo-cult DevOps <span class="sym">DevOps</span></h3>
+      <p>A green CI pipeline exists, but a manual approval gets bolted back in front of every deploy "just in case," because nobody actually trusts the test suite.</p>
+      <div class="fix"><b>Fix →</b> invest in the tests until the gate is trustworthy — don't just automate the ceremony around a gate nobody believes.</div>
+    </div>
+    <div class="antipattern">
+      <h3>Dark agile <span class="sym">Scaled agile</span></h3>
+      <p>SAFe or LeSS is adopted to coordinate teams, and the coordination overhead it was meant to replace grows right back in the form of PI-planning committees.</p>
+      <div class="fix"><b>Fix →</b> scale the minimum coordination the dependency graph actually requires, not the framework's full ceremony set.</div>
+    </div>
+    <div class="antipattern">
+      <h3>Spec-driven paralysis <span class="sym">Plan-driven</span></h3>
+      <p>A heavyweight requirements document gets one formal sign-off, then nobody updates it again — so the traceability matrix stops meaning anything the day coding starts.</p>
+      <div class="fix"><b>Fix →</b> keep the spec and its traceability matrix live and versioned, not a one-time ritual.</div>
+    </div>
+  </section>
+
+  <section id="applied">
+    <div class="section-head"><span class="section-num">07</span><h2>Applied: a three-lens stack from two of my repos</h2></div>
+    <p class="section-intro"><code class="mono" style="background:var(--bg-sunken); padding:1px 6px; border-radius:3px;">global-market-scanners</code> and <code class="mono" style="background:var(--bg-sunken); padding:1px 6px; border-radius:3px;">global-stock-screener</code> each run SDLC, SAFe, and TOGAF at once — not because one wasn't enough, but because each answers a question the others don't.</p>
+
+    <div class="table-wrap lens-table">
+      <table>
+        <thead><tr><th>Lens</th><th>Answers</th><th>Lives in</th></tr></thead>
+        <tbody>
+          <tr><td class="name">SDLC</td><td>What phase is this work in — and is any phase being skipped?</td><td class="mono">SDLC.md phase table</td></tr>
+          <tr><td class="name">SAFe (Agile)</td><td>What's next, and why that over everything else in the backlog?</td><td class="mono">backlog.py, WSJF ranking, PI planning</td></tr>
+          <tr><td class="name">TOGAF</td><td>Is the architecture still sound after everything shipped this quarter?</td><td class="mono">togaf.py govern — 10/10 principles</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="formula">
+      WSJF = Cost of Delay / Job Size = (business value + time criticality + risk reduction) / job size
+      <div class="note">Highest WSJF first. In practice: a 1-point fix that clamps an absurd P/E outranks an 8-point signal build — small, urgent, and low-risk beats big and merely valuable.</div>
+    </div>
+
+    <div class="checklist" style="margin-top:22px;">
+      <div class="check-item"><div class="tag">Enforced, not aspirational</div><h3>Definition of Done</h3><p>Behaviour implemented · offline unit tests added · lint clean, dependency map regenerated · integrity &amp; architecture governance verified · merged via PR with every CI check green. A feature isn't done until <code>governance.py</code> reports CONFORMANT.</p></div>
+      <div class="check-item"><div class="tag">SAFe artifact → repo</div><h3>Backlog hierarchy</h3><p>Epic = a theme ("data quality," "smart-money signals"). Feature = a shippable module. Story = a commit on a feature branch. Enabler = infra work — integrity checks, the dependency map, preflight.</p></div>
+    </div>
+
+    <div class="learned">
+      <h3>The gap that closed <span class="sym">real change</span></h3>
+      <p>Both repos were built iteratively — each feature shipped and smoke-tested by hand — with no automated test suite and no CI. That's the exact failure this page's <a href="#universal">Universal practices</a> section warns about: small batches with no real feedback loop underneath them.</p>
+      <p>Closing it meant adding <code>tests/test_core.py</code> — unit tests over the deterministic core (the rate limiter, point-in-time filing-date filtering, factor regressions) — plus a GitHub Actions workflow on every push: unit tests, architecture governance, and a file-integrity check against a committed checksum manifest. A regression now fails CI instead of shipping quietly.</p>
+    </div>
+  </section>
+
+  <section id="theory">
+    <div class="section-head"><span class="section-num">08</span><h2>Computer science theory, applied</h2></div>
+    <p class="section-intro">Process models tell you how to sequence work. These are older and more fundamental — results from theory of computation, distributed systems, and information theory that hold regardless of what process you run, and quietly explain why some product and tooling decisions work and others can't.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concept</th><th>Field</th><th>Core idea</th><th>Applied to products &amp; tools</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="name">Conway's Law</td>
+            <td>Org theory / SE</td>
+            <td>A system's structure mirrors the communication structure of the org that built it</td>
+            <td>An architecture problem is often an org-chart problem in disguise — redraw team boundaries before redrawing module boundaries (the "inverse Conway maneuver")</td>
+          </tr>
+          <tr>
+            <td class="name">Little's Law</td>
+            <td>Queueing theory</td>
+            <td>WIP = throughput × time-in-system (L = λW)</td>
+            <td>The arithmetic behind every WIP limit and cycle-time chart in this page's Kanban row — the only way to cut lead time without adding people is to cut work-in-progress</td>
+          </tr>
+          <tr>
+            <td class="name">CAP theorem</td>
+            <td>Distributed systems</td>
+            <td>Under a network partition, a distributed system picks consistency or availability — never both</td>
+            <td>Forces the tradeoff into the open: "cart total may lag by a second" beats an accidental tradeoff discovered during an incident review</td>
+          </tr>
+          <tr>
+            <td class="name">Amdahl's Law</td>
+            <td>Parallel computing</td>
+            <td>Speedup from optimizing one part is capped by the share of time spent outside it</td>
+            <td>Don't shave milliseconds off a hot loop that's 5% of latency when onboarding friction is 60% of churn — measure the bottleneck before funding the fix</td>
+          </tr>
+          <tr>
+            <td class="name">Postel's Law</td>
+            <td>Protocol design</td>
+            <td>Be conservative in what you send, liberal in what you accept</td>
+            <td>The right default for APIs, file importers, and form inputs alike: tolerate messy input, always emit clean, well-formed output</td>
+          </tr>
+          <tr>
+            <td class="name">Computational complexity</td>
+            <td>Theory of computation</td>
+            <td>Cost as input size grows (Big-O) — and some problems have no known efficient exact solution</td>
+            <td>An O(n²) admin screen is fine at 50 rows and a support ticket at 50,000 — and reaching for a heuristic instead of an exact solver is a legitimate product choice, not a shortcut</td>
+          </tr>
+          <tr>
+            <td class="name">Undecidability</td>
+            <td>Theory of computation</td>
+            <td>No general algorithm can decide whether an arbitrary program halts (Turing)</td>
+            <td>Sets a hard ceiling on what static analysis or automated code review can ever promise — some class of bug is provably uncatchable by any tool, which should temper how confidently a product markets its own guarantees</td>
+          </tr>
+          <tr>
+            <td class="name">Shannon entropy</td>
+            <td>Information theory</td>
+            <td>A message's information content is inversely related to how predictable it is</td>
+            <td>An alert that fires on an already-known, expected state carries zero information — it spends signal budget the reader needs for the next real incident</td>
+          </tr>
+          <tr>
+            <td class="name">Mechanism design</td>
+            <td>Game theory</td>
+            <td>Design the payoff structure so the equilibrium behavior is the one you actually want</td>
+            <td>Pricing tiers, rate limits, referral programs, reputation systems — engineer the incentive, don't rely on goodwill to get the outcome you want</td>
+          </tr>
+          <tr>
+            <td class="name">Byzantine fault tolerance</td>
+            <td>Distributed systems</td>
+            <td>A system must tolerate participants that behave arbitrarily, not just ones that go silent</td>
+            <td>Any multi-party integration — a marketplace, a plugin ecosystem, federated data — should assume a participant can be wrong or adversarial, not merely offline, and design trust boundaries accordingly</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="ddd">
+    <div class="section-head"><span class="section-num">09</span><h2>Domain-Driven Design</h2></div>
+    <p class="section-intro">Where the sections above shape <em>when</em> work happens, DDD shapes <em>how the codebase itself is cut up</em> — along the boundaries of the business domain, not the technical layers. Strategic design decides where the boundaries go; tactical design is what you build inside one.</p>
+
+    <p class="subhead">Strategic design</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concept</th><th>Core idea</th><th>Applied to products &amp; tools</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Ubiquitous language</td><td>One vocabulary shared by domain experts and code — no separate "business term" and "code term" for the same thing</td><td>A feature's name in the UI, the ticket, and the database column should be the same word; every translation between them is a chance for meaning to drift</td></tr>
+          <tr><td class="name">Bounded context</td><td>An explicit boundary where one model and its vocabulary hold true — the same word can mean something else just outside it</td><td>"Order" means something different to Fulfillment than to Billing; stop forcing one shared <code>Order</code> object to serve both and the schema stops fighting itself</td></tr>
+          <tr><td class="name">Core vs. generic subdomain</td><td>Not every part of the domain deserves the same investment</td><td>Spend real design effort on the 1–2 subdomains that differentiate the product; buy or borrow the generic ones — auth, email, payments — instead of modeling them from scratch</td></tr>
+          <tr><td class="name">Context mapping</td><td>Naming the relationship between two bounded contexts explicitly (shared kernel, customer/supplier, conformist, anticorruption layer)</td><td>Saying "we conform to the payment provider's model" out loud turns an implicit, ad hoc integration into a decision someone actually made</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="subhead">Tactical design</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Concept</th><th>Core idea</th><th>Applied to products &amp; tools</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Aggregate</td><td>A cluster of objects treated as one consistency boundary, entered only through its root</td><td>Stops "update three tables and hope" — an aggregate's invariants are enforced in one place, atomically</td></tr>
+          <tr><td class="name">Entity vs. value object</td><td>An entity has identity that persists through change; a value object is defined only by its attributes</td><td>A user keeps identity across an edited email address; a money amount ($10, USD) doesn't — treat it as immutable and swappable, not something to mutate in place</td></tr>
+          <tr><td class="name">Domain event</td><td>A fact that already happened in the domain, named in the past tense, that other parts of the system react to</td><td>An explicit <code>OrderShipped</code> event — not a side effect buried in a controller — is what makes a webhook, an audit log, and a notification all independently testable</td></tr>
+          <tr><td class="name">Anticorruption layer</td><td>A translation layer that keeps an external or legacy system's model from leaking into your own</td><td>Wrap the flaky third-party API or the legacy database behind an adapter that speaks your ubiquitous language, so its quirks don't spread into your domain code</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="togaf">
+    <div class="section-head"><span class="section-num">10</span><h2>TOGAF: enterprise architecture</h2></div>
+    <p class="section-intro">TOGAF treats "the architecture" as a repeatable method, not a diagram someone draws once. Its center is the <strong>Architecture Development Method (ADM)</strong> — a cycle of phases, all of them anchored to continuous Requirements Management.</p>
+
+    <div class="pipeline">
+      <span class="stage">Preliminary</span><span class="arrow">→</span>
+      <span class="stage">A · Vision</span><span class="arrow">→</span>
+      <span class="stage">B · Business</span><span class="arrow">→</span>
+      <span class="stage">C · Data &amp; Apps</span><span class="arrow">→</span>
+      <span class="stage">D · Technology</span><span class="arrow">→</span>
+      <span class="stage">E · Opportunities</span><span class="arrow">→</span>
+      <span class="stage">F · Migration Plan</span><span class="arrow">→</span>
+      <span class="stage">G · Governance</span><span class="arrow">→</span>
+      <span class="stage">H · Change Mgmt</span><span class="arrow">↻</span>
+    </div>
+    <p class="section-intro" style="margin-top:12px; font-size:0.9rem;">Cycles back to Preliminary; Requirements Management sits at the center and feeds every phase, not just phase B.</p>
+
+    <div class="table-wrap" style="margin-top:26px;">
+      <table>
+        <thead><tr><th>Concept</th><th>Core idea</th><th>Applied to products &amp; tools</th></tr></thead>
+        <tbody>
+          <tr><td class="name">The ADM cycle</td><td>Architecture is a repeatable, iterated development method with defined phases, not a one-time artifact</td><td>Treat "our architecture doc" as a process with an owner and a next iteration date — see this page's <a href="#antipatterns">spec-driven paralysis</a> anti-pattern for what happens when it isn't</td></tr>
+          <tr><td class="name">BDAT domains</td><td>Four architecture layers — Business, Data, Application, Technology — addressed in that order</td><td>A technology choice justified only in technology terms, with no traceable business capability behind it, is the tell that BDAT was skipped</td></tr>
+          <tr><td class="name">Architecture principles</td><td>Written, numbered statements that constrain future decisions — not aspirations</td><td>Codified, checkable rules a build can fail against turn architecture review from a meeting into a gate</td></tr>
+          <tr><td class="name">ABB vs. SBB</td><td>Separate <em>what capability is required</em> (Architecture Building Block) from <em>which specific product provides it</em> (Solution Building Block)</td><td>Name the capability first — "durable message delivery" — before the vendor — "so we chose SQS" — and the decision outlives any one vendor swap</td></tr>
+          <tr><td class="name">Gap analysis</td><td>State the baseline architecture, state the target, and the difference between them is the migration roadmap</td><td>The fastest way to turn "we should modernize this" into funded work: write down what's there, write down what's wanted — the gap list becomes the backlog</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="learned">
+      <h3>Already running this <span class="sym">real change</span></h3>
+      <p>This one isn't hypothetical — see <a href="#applied">Applied</a> above: <code>global-market-scanners</code> and <code>global-stock-screener</code> both enforce <code>togaf.py govern</code> as a real CI gate (10/10 architecture principles, checked on every push), not a document nobody re-reads.</p>
+    </div>
+  </section>
+
+  <section id="library">
+    <div class="section-head"><span class="section-num">11</span><h2>From your own library</h2></div>
+    <p class="section-intro">Every concept above has a book or paper sitting in your own Zotero/Dropbox research library backing it — queried live from <code>research-toolkit/document_catalog.duckdb</code>, the DuckDB catalog built over that Zotero SQLite library. A cross-section, not the whole shelf:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Section</th><th>From your library</th></tr></thead>
+        <tbody>
+          <tr><td class="name"><a href="#sdlc">SDLC / Agile</a></td><td>"A data-driven comparative analysis of Agile and Waterfall methodologies" (paper) · SAFe scaled-agile course notes</td></tr>
+          <tr><td class="name">Architecture &amp; patterns</td><td><em>Fundamentals of Software Architecture</em> · Kuchana, <em>Software Architecture Design Patterns in Java</em> · Buschmann et al., <em>Pattern-Oriented Software Architecture, Vol. 1</em></td></tr>
+          <tr><td class="name"><a href="#ddd">Domain-Driven Design</a></td><td>Eric Evans, <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em> — the source text section 09 is built from</td></tr>
+          <tr><td class="name"><a href="#togaf">TOGAF</a></td><td><em>TOGAF Standard, 10th Edition — Certification Portfolio</em> · TOGAF EA Foundation datasheet</td></tr>
+          <tr><td class="name"><a href="#devops">Microservices &amp; DevOps</a></td><td>Garofolo, <em>Practical Microservices</em> (event sourcing/CQRS) · Vohra, <em>Kubernetes Microservices with Docker</em> · Riti, <em>Pro DevOps with Google Cloud Platform</em></td></tr>
+          <tr><td class="name">Databases</td><td><em>DataBaseBook2023</em> · Transact-SQL / PL-SQL references · "Query Acceleration of Graph Databases"</td></tr>
+          <tr><td class="name"><a href="#theory">AI / ML / algorithms</a></td><td>Russell &amp; Norvig, <em>Artificial Intelligence: A Modern Approach</em> · Weiss, <em>Multiagent Systems</em> · Herbrich, <em>Learning Kernel Classifiers</em></td></tr>
+          <tr><td class="name">Security</td><td>"Secure Network Architecture" · "Introduction to SQL Injection"</td></tr>
+          <tr><td class="name">Project management</td><td>Heldman, <em>PMP: Project Management Professional Study Guide</em> · University of Waterloo RAID Log reference</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="lib-source">
+      <span>Source: <span class="stat">16,794</span> cataloged documents</span>
+      <span>·</span>
+      <span><code>research-toolkit/document_catalog.duckdb</code>, built from the Zotero library synced via Dropbox</span>
+      <span>·</span>
+      <span>this is a live query of what you already have, not a curated reading list — titles are deduped but not vetted for quality</span>
+    </div>
+  </section>
+
+  <footer>
+    <span>The Delivery Playbook · reference, not doctrine</span>
+    <span>compiled from SDLC/Agile/DevOps practice + this account's own repos and library</span>
+  </footer>
+
+</div>
