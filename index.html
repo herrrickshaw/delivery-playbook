@@ -322,7 +322,7 @@
 
     <dl class="control-block">
       <div><dt>Scope</dt><dd>SDLC · Agile · DevOps</dd></div>
-      <div><dt>Disciplines</dt><dd>16 models · 10 theory · DDD · TOGAF</dd></div>
+      <div><dt>Disciplines</dt><dd>16 models · 10 theory · DDD · TOGAF · testing</dd></div>
       <div><dt>Use for</dt><dd>Choosing &amp; diagnosing</dd></div>
       <div><dt>Status</dt><dd>Living reference</dd></div>
     </dl>
@@ -342,6 +342,7 @@
     <a href="#togaf">TOGAF</a>
     <a href="#library">Your library</a>
     <a href="#etl">Build pillars</a>
+    <a href="#testing">Testing</a>
   </nav>
 
   <section class="timeline-section" id="lineage">
@@ -808,6 +809,90 @@
           <tr><td class="name">Performance &amp; scalability</td><td>Staying fast as load grows, not just at demo scale</td><td>Caching, pagination/batching, async I/O, load testing</td></tr>
         </tbody>
       </table>
+    </div>
+  </section>
+
+  <section id="testing">
+    <div class="section-head"><span class="section-num">13</span><h2>The software testing playbook</h2></div>
+    <p class="section-intro">§12's "testing strategy" row earns its own field guide: which shape of test suite fits which system, the vocabulary for what a substituted dependency actually is, the tests most teams forget exist, and the failure modes that make a green suite lie to you.</p>
+
+    <p class="subhead">Shapes of a test suite</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Shape</th><th>Emphasis</th><th>Best fit</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Pyramid (Cohn)</td><td>Many fast unit tests, fewer integration tests, a thin layer of end-to-end tests on top</td><td>Libraries and monoliths with clear, stable unit boundaries</td></tr>
+          <tr><td class="name">Trophy (Kent C. Dodds)</td><td>Integration tests are the largest layer; unit tests only where logic is genuinely isolated</td><td>Frontend/UI-heavy apps, where the units are trivial but the wiring between them is where bugs hide</td></tr>
+          <tr><td class="name">Honeycomb (Spotify)</td><td>Integration-heavy with thin unit and end-to-end layers on either side</td><td>Microservices, where the real risk sits at service boundaries and contracts, not inside any one service</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="subhead">Test doubles (Fowler's taxonomy)</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Double</th><th>What it actually does</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Dummy</td><td>Passed to satisfy a parameter list but never actually used</td><td>A null/placeholder logger passed to a constructor that never logs in this test path</td></tr>
+          <tr><td class="name">Fake</td><td>A working, simplified implementation — not the real thing, but genuinely functional</td><td>An in-memory database standing in for the real one</td></tr>
+          <tr><td class="name">Stub</td><td>Returns canned answers to whatever calls the test makes on it</td><td>A payment client stubbed to always return "approved"</td></tr>
+          <tr><td class="name">Spy</td><td>A stub that also records how it was called, for later assertions</td><td>Asserting the email service was called exactly once, with the right recipient</td></tr>
+          <tr><td class="name">Mock</td><td>Pre-programmed with expectations about calls, and verifies them itself</td><td>The test fails if <code>charge()</code> wasn't called with the expected amount — the mock enforces it, not a later assertion</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="subhead">Beyond the pyramid</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Tests what</th><th>Tool examples</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Contract testing</td><td>A consumer and provider agree on an interface without either running the other's full system</td><td>Pact, Spring Cloud Contract</td></tr>
+          <tr><td class="name">Property-based testing</td><td>An invariant holds across hundreds of generated inputs, not just the three you thought of</td><td>Hypothesis (Python), fast-check (JS), QuickCheck (Haskell)</td></tr>
+          <tr><td class="name">Mutation testing</td><td>Whether the test suite actually catches bugs — deliberately breaks the code and checks a test fails</td><td>Stryker, mutmut, PIT</td></tr>
+          <tr><td class="name">Chaos engineering</td><td>Whether the system degrades gracefully when a dependency is deliberately killed</td><td>Chaos Monkey, Gremlin</td></tr>
+          <tr><td class="name">Performance/load testing</td><td>Latency and throughput under realistic and peak load, not just correctness</td><td>k6, Locust, JMeter</td></tr>
+          <tr><td class="name">Security testing</td><td>Exploitable flaws — injection, auth bypass, vulnerable dependencies</td><td>OWASP ZAP (DAST), Semgrep (SAST), Snyk (dependency scanning)</td></tr>
+          <tr><td class="name">Visual regression</td><td>A pixel-level UI change nobody intended</td><td>Percy, Chromatic</td></tr>
+          <tr><td class="name">Smoke testing</td><td>The bare minimum — did the thing even start — run right after every deploy</td><td>A tiny subset of the e2e suite, gating rollout</td></tr>
+          <tr><td class="name">Exploratory testing</td><td>What a human notices that no scripted test was written to check</td><td>Unscripted, time-boxed manual sessions</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="checklist" style="margin-top:22px;">
+      <div class="check-item"><div class="tag">F · Fast</div><h3>A slow suite stops running</h3><p>If it takes coffee-break long to get feedback, people start skipping it — speed isn't a nice-to-have, it's what keeps the suite in the loop at all.</p></div>
+      <div class="check-item"><div class="tag">I · Isolated</div><h3>No test depends on another's state</h3><p>Tests must pass in any order, alone or in parallel — shared mutable state between tests is how a single failure cascades into forty red ones.</p></div>
+      <div class="check-item"><div class="tag">R · Repeatable</div><h3>Same result, every environment</h3><p>No dependence on real time, real network, or execution order — a test that passes on your machine and fails in CI is a test with a hidden dependency.</p></div>
+      <div class="check-item"><div class="tag">S · Self-checking</div><h3>Pass/fail, no human reading a log</h3><p>A test that requires a person to eyeball output and decide isn't automated — it's a manual step wearing a test's clothing.</p></div>
+      <div class="check-item"><div class="tag">T · Timely</div><h3>Written close to the code, not after</h3><p>A test written days after the code ships tests today's assumptions about what the code does, not what it was supposed to do.</p></div>
+    </div>
+
+    <p class="subhead">Failure modes worth naming</p>
+    <div class="antipattern">
+      <h3>Ice-cream-cone <span class="sym">Inverted pyramid</span></h3>
+      <p>Mostly manual and end-to-end tests, a thin sliver of unit tests at the bottom. Every change requires a slow, flaky, human-driven regression pass.</p>
+      <div class="fix"><b>Fix →</b> push coverage down the pyramid — a bug caught by a unit test costs seconds; the same bug caught by an e2e suite costs minutes and a flake investigation.</div>
+    </div>
+    <div class="antipattern">
+      <h3>Coverage theater <span class="sym">Metric gaming</span></h3>
+      <p>100% line coverage with assertions that check nothing meaningful — every line executed, no behavior verified. Mutation testing exposes this; line coverage alone can't.</p>
+      <div class="fix"><b>Fix →</b> treat coverage as a floor that flags untested code, never a ceiling that proves quality.</div>
+    </div>
+    <div class="antipattern">
+      <h3>Flaky-test tolerance <span class="sym">Any suite</span></h3>
+      <p>"Just rerun it" becomes the default response to a red build. Once that's normalized, a genuinely broken build looks exactly like noise.</p>
+      <div class="fix"><b>Fix →</b> quarantine flaky tests into a separate, tracked, non-blocking suite immediately — never let them sit blocking and ignored in the main one.</div>
+    </div>
+    <div class="antipattern">
+      <h3>Testing implementation, not behavior <span class="sym">Over-coupling</span></h3>
+      <p>A test asserts on private internals or exact call sequences, so it breaks on every refactor even when the observable behavior never changed.</p>
+      <div class="fix"><b>Fix →</b> assert on inputs and outputs a caller can actually observe, not on how the code gets there.</div>
+    </div>
+    <div class="antipattern">
+      <h3>Mocking everything <span class="sym">Zero real integration</span></h3>
+      <p>Every collaborator is mocked, so the suite is green while the real, unmocked wiring between components has never once been exercised.</p>
+      <div class="fix"><b>Fix →</b> pair unit tests (mocked) with a smaller layer of real integration tests that use the actual collaborators — that's what the Trophy and Honeycomb shapes above are for.</div>
     </div>
   </section>
 
