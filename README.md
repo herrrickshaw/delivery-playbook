@@ -28,3 +28,15 @@ from the same content; the two aren't auto-synced.
 Living document — not a point-in-time snapshot. Indexed in
 [`repo-traffic-analytics/artifacts.yaml`](https://github.com/herrrickshaw/repo-traffic-analytics/blob/main/artifacts.yaml)
 alongside the account's other published reference artifacts.
+
+## Further reading (2026-10 update)
+
+Primary sources only. Each URL returned HTTP 200 on 2026-10-17 (checked with curl).
+
+- [DORA research](https://dora.dev/research/) — the program behind the four delivery-performance metrics cited in the Lineage section; the place to check current definitions rather than relying on secondary summaries.
+- [Team Topologies: key concepts](https://teamtopologies.com/key-concepts) — the four team types and three interaction modes; the practical follow-on to the Conway's Law item in the CS-theory section.
+- [The Scrum Guide](https://scrumguides.org/scrum-guide.html) — the authoritative definition of Scrum, useful for checking the Agile-family section against the source.
+- [The Open Group: TOGAF Standard](https://pubs.opengroup.org/togaf-standard/) — official publication of the ADM and its supporting content, backing the TOGAF section.
+- [Google SRE Book (table of contents)](https://sre.google/sre-book/table-of-contents/) — free primary text on SLOs, error budgets and toil, extending the DevOps and continuous-delivery section.
+
+Not included: the SAFe framework site (framework.scaledagile.com) returned HTTP 403 to curl, so it could not be verified from this environment.
