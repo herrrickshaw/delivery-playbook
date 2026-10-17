@@ -1,10 +1,7 @@
 {
+  "hyperedges": [],
   "input_tokens": 0,
   "output_tokens": 0,
-  "failed_sources": [],
-  "extracted_sources": [
-    "/Users/umashankar/repos/delivery-playbook/README.md"
-  ],
   "nodes": [
     {
       "id": "readme",
