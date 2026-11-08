@@ -340,7 +340,6 @@
     <a href="#theory">CS theory</a>
     <a href="#ddd">DDD</a>
     <a href="#togaf">TOGAF</a>
-    <a href="#library">Your library</a>
     <a href="#etl">Build pillars</a>
     <a href="#testing">Testing</a>
   </nav>
@@ -752,39 +751,6 @@
     <div class="learned">
       <h3>Already running this <span class="sym">real change</span></h3>
       <p>This one isn't hypothetical — see <a href="#applied">Applied</a> above: <code>global-market-scanners</code> and <code>global-stock-screener</code> both enforce <code>togaf.py govern</code> as a real CI gate (10/10 architecture principles, checked on every push), not a document nobody re-reads.</p>
-    </div>
-  </section>
-
-  <section id="library">
-    <div class="section-head"><span class="section-num">11</span><h2>From your own library</h2></div>
-    <p class="section-intro">Every concept above has a book or paper sitting in your own Zotero/Dropbox research library backing it — queried live from <code>research-toolkit/document_catalog.duckdb</code>, the DuckDB catalog built over that Zotero SQLite library. A cross-section, not the whole shelf:</p>
-
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Section</th><th>From your library</th></tr></thead>
-        <tbody>
-          <tr><td class="name"><a href="#sdlc">SDLC / Agile</a></td><td>"A data-driven comparative analysis of Agile and Waterfall methodologies" (paper) · SAFe scaled-agile course notes</td></tr>
-          <tr><td class="name">Architecture &amp; patterns</td><td><em>Fundamentals of Software Architecture</em> · Kuchana, <em>Software Architecture Design Patterns in Java</em> · Buschmann et al., <em>Pattern-Oriented Software Architecture, Vol. 1</em> · Seroter et al., <em>Applied Architecture Patterns on the Microsoft Platform</em></td></tr>
-          <tr><td class="name"><a href="#ddd">Domain-Driven Design</a></td><td>Eric Evans, <em>Domain-Driven Design: Tackling Complexity in the Heart of Software</em> — the source text section 09 is built from</td></tr>
-          <tr><td class="name"><a href="#togaf">TOGAF</a></td><td><em>TOGAF Standard, 10th Edition — Certification Portfolio</em> · TOGAF EA Foundation datasheet</td></tr>
-          <tr><td class="name"><a href="#devops">Microservices &amp; DevOps</a></td><td>Garofolo, <em>Practical Microservices</em> (event sourcing/CQRS) · Vohra, <em>Kubernetes Microservices with Docker</em> · Riti, <em>Pro DevOps with Google Cloud Platform</em></td></tr>
-          <tr><td class="name">Databases</td><td><em>DataBaseBook2023</em> · Transact-SQL / PL-SQL references · "Query Acceleration of Graph Databases" · "Components and Development in Big Data Systems" (2019)</td></tr>
-          <tr><td class="name"><a href="#theory">AI / ML / algorithms</a></td><td>Russell &amp; Norvig, <em>Artificial Intelligence: A Modern Approach</em> · Weiss, <em>Multiagent Systems</em> · Herbrich, <em>Learning Kernel Classifiers</em></td></tr>
-          <tr><td class="name">Security</td><td>"Secure Network Architecture" · "Introduction to SQL Injection"</td></tr>
-          <tr><td class="name">Project management</td><td>Heldman, <em>PMP: Project Management Professional Study Guide</em> · University of Waterloo RAID Log reference</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="lib-source">
-      <span>Source: <span class="stat">16,794</span> cataloged documents</span>
-      <span>·</span>
-      <span><code>research-toolkit/document_catalog.duckdb</code>, built from the Zotero library synced via Dropbox</span>
-      <span>·</span>
-      <span>this is a live query of what you already have, not a curated reading list — titles are deduped but not vetted for quality</span>
-    </div>
-    <div class="lib-source" style="margin-top:10px; border-color:var(--warn); background:var(--warn-soft);">
-      <span>Checked and confirmed absent: ETL/data-engineering toolkits. A full sweep — catalog titles, then Dropbox's own content-indexed search across the actual PDF text, not just filenames — found zero mentions of Airflow, dbt, Kafka, Postgres, MySQL, MongoDB, Snowflake, BigQuery, or Oracle anywhere in the library. The table above is the complete, honest extent of what you have on databases; §12 below is general knowledge, not library-sourced.</span>
     </div>
   </section>
 
